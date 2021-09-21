@@ -1,0 +1,42 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using System.Data;
+@model DataTable
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h3 class="display-4" style="font-weight: bold; color: #404040">Bulk Weather Checker</h3>
+    <p>Upload a CSV file to bulk check weather based on city names.</p>
+    <br />
+    <form asp-controller="Home" asp-action="Index" method="post" enctype="multipart/form-data">
+        <input type="file" name="postedFile" />
+        <input type="submit" value="Import" onclick="on()" disabled />
+    </form>
+
+    @if (Model != null)
+    {
+        <br />
+        <hr />
+        <div class="card-deck">
+            @foreach (DataRow dr in Model.Rows)
+            {
+                var temp = dr.ItemArray[1].ToString().Split(';');
+                <div class="card weather-card">
+                    <img src="@temp[1]" class="card-img-top" alt="@dr.ItemArray[0]">
+                    <div class="card-body">
+                        <p class="card-title">@dr.ItemArray[0]</p>
+                        <h3 class="card-text">@temp[0]</h3>
+                        <p class="card-text">@dr.ItemArray[2]</p>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    <div id="overlay">
+        <div class="w-100 d-flex justify-content-center align-items-center">
+            <div class="spinner"></div>
+        </div>
+    </div>
+</div>
